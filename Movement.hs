@@ -41,8 +41,8 @@ getPossibleROs piece  = powerset . getRelevantOccupancy piece
 In the list monad, '<-' essentially means "choose from".
 so sequence, which basically a sort of fold using (<-), chooses each possible blocked-set in turn (it chooses one
 blocked-set for each ray).  the filter is required because if sequence encounters a [], the whole result is [].
-map concat removes an extra level of indirection from the middle (the result of the sequence operation is a list
-of a bunch of 1-length lists containing the positions we want).
+concat removes an extra level of indirection (the result of the sequence operation is a list of a bunch of 1-length
+lists containing the positions we want).
 
 (tail . inits) instead of (inits) because we can always move to the first blocked square (by capturing the blocking piece)
 -}
