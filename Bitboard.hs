@@ -1,18 +1,33 @@
 module Bitboard (
-  module Movement,
-  Bitboard, flattenSq, unflattenSq, toBitboard, showBin, show2D) where
+        Position, squareToName, nameToSquare, onChessboard,
+        Bitboard, flattenSq, unflattenSq, toBitboard, showBin, show2D) where
 
+import Data.Char (ord, chr)
 import Data.Bits ((.&.), (.|.), shiftL, bit)
-import Data.List(foldl', splitAt)
+import Data.List(foldl')
 import Data.Word (Word64)
 
-import Movement
 
---Functions dealing with bitboards; i.e. representations of a chessboard as a 64-bit number.
+--First some stuff about positions
+--About square representation and ordering:
+--Programatically, squares are represented as simple a (Int,Int).  First element of the pair is the file or 'x',
+--then the rank or 'y'.  (0,0) is a1 and (7,7) is h8.
+type Position = (Int,Int)
 
+squareToName :: Position -> String
+squareToName (file, rank) = chr (file + ord 'a') : show (1+rank)
+
+nameToSquare :: String -> Position
+nameToSquare [cf,cr] = (ord cf - ord 'a', ord cr - ord '1')
+nameToSquare _ = undefined
+
+onChessboard :: Position -> Bool
+onChessboard (file, rank) = file < 8 && file >= 0 && rank < 8 && rank >= 0
+
+
+--Now some bitboard stuff
 type Bitboard = Word64
 
---little endian
 flattenSq :: Position -> Int
 flattenSq (x, y) = 8*y + x
 
